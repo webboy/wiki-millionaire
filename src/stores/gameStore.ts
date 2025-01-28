@@ -54,10 +54,13 @@ export const useGameStore = defineStore('game', () => {
     };
   };
 
-  const updateTimer = (timeRemaining: number): void => {
-    gameState.value.timeRemaining = timeRemaining;
+  const updateTimer = (timeRemaining: number) => {
     if (timeRemaining <= 0) {
+      // Set time to 0 and mark game as over
+      gameState.value.timeRemaining = 0;
       gameOver(false);
+    } else {
+      gameState.value.timeRemaining = timeRemaining;
     }
   };
 

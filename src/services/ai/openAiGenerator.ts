@@ -1,4 +1,3 @@
-// src/services/ai/openAiGenerator.ts
 import { OpenAI } from 'openai';
 import type { QuestionGenerator } from './types';
 
@@ -53,12 +52,7 @@ export class OpenAIQuestionGenerator implements QuestionGenerator {
         throw new Error('Invalid response format from OpenAI');
       }
 
-      return {
-        question: parsedData.question,
-        choices: parsedData.choices as string[],
-        correctAnswerIndex: parsedData.correctAnswerIndex
-      };
-
+      return parsedData;
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Failed to generate question: ${error.message}`);

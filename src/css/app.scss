@@ -1,1 +1,92 @@
 // app global css in SCSS form
+@import './brand-variables.scss';
+
+// Global Typography
+body {
+  font-family: $primary-font;
+  font-size: $body-size;
+  color: $ink-black;
+  background: $paper-white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $primary-font;
+  font-weight: 500;
+}
+
+h1 { font-size: $h1-size; }
+h2 { font-size: $h2-size; }
+h3 { font-size: $h3-size; }
+h4 { font-size: $h4-size; }
+
+// Global Component Styles
+.q-btn {
+  text-transform: none;
+  font-weight: 700;
+  transition: all $transition-quick ease-in-out;
+
+  &--primary {
+    background: $deep-knowledge-blue;
+    color: white;
+    border-radius: 8px;
+    padding: 8px $space-md;
+
+    &:hover {
+      background: lighten($deep-knowledge-blue, 10%);
+    }
+  }
+}
+
+.q-card {
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  &__section {
+    padding: $space-md;
+  }
+}
+
+// Game-specific Components
+.choice-button {
+  background: white;
+  border: 2px solid $deep-knowledge-blue;
+  color: $ink-black;
+  border-radius: 8px;
+  text-align: left;
+  min-height: 56px;
+  transition: all $transition-quick ease-in-out;
+
+  &:hover {
+    background: rgba($deep-knowledge-blue, 0.05);
+  }
+
+  &.correct {
+    background: $success-green;
+    color: white;
+    border-color: $success-green;
+  }
+
+  &.incorrect {
+    background: $alert-red;
+    color: white;
+    border-color: $alert-red;
+  }
+}
+
+.prize-ladder {
+  .prize-level {
+    padding: $space-base;
+    border-bottom: 1px solid $subtle-gray;
+    transition: background $transition-quick ease-in-out;
+
+    &--current {
+      background: $deep-knowledge-blue;
+      color: white;
+    }
+
+    &--milestone {
+      border-bottom: 2px solid $victory-gold;
+    }
+  }
+}

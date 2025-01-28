@@ -7,11 +7,10 @@
         <div class="text-h3 text-weight-bold" :class="gameState.hasWon ? 'text-positive' : 'text-negative'">
           {{ gameState.hasWon ? 'Congratulations!' : 'Game Over' }}
         </div>
-        <div class="text-h5 q-mt-md">{{ gameState.playerName }}</div>
+        <div class="text-h5">{{ gameState.playerName }}</div>
       </q-card-section>
-
       <!-- Prize Information -->
-      <q-card-section class="text-center q-pt-none">
+      <q-card-section class="text-center">
         <div class="text-h6 q-mb-md">
           {{ gameState.hasWon ? 'You won' : 'You won' }}
         </div>
@@ -21,16 +20,16 @@
 
         <!-- Game Statistics -->
         <div class="row q-col-gutter-md q-mb-lg">
-          <div class="col-6">
-            <q-card flat bordered>
+          <div class="col-xs-12 col-sm-6">
+            <q-card flat bordered class="bg-grey-3">
               <q-card-section>
                 <div class="text-subtitle2">Questions Answered</div>
                 <div class="text-h6">{{ gameState.currentQuestion }}</div>
               </q-card-section>
             </q-card>
           </div>
-          <div class="col-6">
-            <q-card flat bordered>
+          <div class="col-xs-12 col-sm-6">
+            <q-card flat bordered class="bg-grey-3">
               <q-card-section>
                 <div class="text-subtitle2">Difficulty</div>
                 <div class="text-h6 text-capitalize">{{ gameState.difficulty }}</div>
@@ -41,8 +40,8 @@
 
         <!-- Lifelines Usage -->
         <div class="row q-col-gutter-md q-mb-lg">
-          <div class="col-6">
-            <q-card flat bordered>
+          <div class="col-xs-12 col-sm-6">
+            <q-card flat bordered class="bg-grey-3">
               <q-card-section>
                 <div class="text-subtitle2">Time Extensions Used</div>
                 <div class="text-h6">
@@ -51,8 +50,8 @@
               </q-card-section>
             </q-card>
           </div>
-          <div class="col-6">
-            <q-card flat bordered>
+          <div class="col-xs-12 col-sm-6">
+            <q-card flat bordered class="bg-grey-3">
               <q-card-section>
                 <div class="text-subtitle2">Splits Used</div>
                 <div class="text-h6">
