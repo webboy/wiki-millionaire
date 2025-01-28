@@ -12,7 +12,7 @@ export const GAME_SETTINGS: Record<Difficulty, GameSettings> = {
   medium: {
     difficulty: 'medium',
     questionsCount: 10,
-    timePerQuestion: 90,
+    timePerQuestion: 60,
     choicesCount: 4,
     safetyNetFrequency: 2,
     moneyProgression: [100, 500, 1000, 5000, 10000, 50000, 100000, 250000, 500000, 1000000]
@@ -20,7 +20,7 @@ export const GAME_SETTINGS: Record<Difficulty, GameSettings> = {
   hard: {
     difficulty: 'hard',
     questionsCount: 15,
-    timePerQuestion: 60,
+    timePerQuestion: 20,
     choicesCount: 6,
     safetyNetFrequency: 3,
     moneyProgression: [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000]

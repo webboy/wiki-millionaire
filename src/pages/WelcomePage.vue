@@ -15,8 +15,8 @@
       <!-- Quick Rules -->
       <q-card-section class="text-center q-pt-none">
         <q-btn
-          flat
-          color="royal-wisdom"
+          glossy
+          color="info"
           label="How to Play"
           @click="rulesDialog = true"
         />
@@ -86,9 +86,9 @@
           <!-- Start Button -->
           <div class="row justify-center q-mt-xl">
             <q-btn
+              glossy
               type="submit"
-              color="deep-knowledge-blue"
-              text-color="victory-gold"
+              color="primary"
               size="lg"
               class="start-button"
               :disable="!isFormValid"
@@ -134,6 +134,7 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useGameStore } from 'src/stores/gameStore';
+import { GAME_SETTINGS } from 'src/config/gameSettings'
 import type { Difficulty } from 'src/types/game';
 
 const router = useRouter();
@@ -147,23 +148,23 @@ const difficulties = [
   {
     value: 'easy' as const,
     label: 'Easy',
-    questions: 5,
-    time: 120,
-    choices: 3
+    questions: GAME_SETTINGS['easy'].questionsCount,
+    time: GAME_SETTINGS['easy'].timePerQuestion,
+    choices: GAME_SETTINGS['easy'].choicesCount
   },
   {
     value: 'medium' as const,
     label: 'Medium',
-    questions: 10,
-    time: 90,
-    choices: 4
+    questions: GAME_SETTINGS['medium'].questionsCount,
+    time: GAME_SETTINGS['medium'].timePerQuestion,
+    choices: GAME_SETTINGS['medium'].choicesCount
   },
   {
     value: 'hard' as const,
     label: 'Hard',
-    questions: 15,
-    time: 60,
-    choices: 6
+    questions: GAME_SETTINGS['hard'].questionsCount,
+    time: GAME_SETTINGS['hard'].timePerQuestion,
+    choices: GAME_SETTINGS['hard'].choicesCount
   }
 ];
 
