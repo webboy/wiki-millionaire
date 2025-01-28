@@ -106,8 +106,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useQuasar } from 'quasar';
+import { useQuasar } from 'quasar'
 import { useGameStore } from 'src/stores/gameStore';
+import { useSettingsStore } from 'src/stores/settingsStore';
 import { GAME_SETTINGS } from 'src/config/gameSettings';
 import { MediaWikiClient } from 'src/services/wiki/mediaWikiClient';
 import { OpenAIQuestionGenerator } from 'src/services/ai/openAiGenerator';
@@ -119,6 +120,8 @@ import { v4 as uuidv4 } from 'uuid';
 const router = useRouter();
 const $q = useQuasar();
 const gameStore = useGameStore();
+const settingsStore = useSettingsStore();
+const { settingsState } = settingsStore;
 const gameState = computed(() => gameStore.gameState);
 const showPrizeLadder = ref(false);
 
@@ -126,8 +129,9 @@ const settings = computed(() => {
   return GAME_SETTINGS[gameState.value.difficulty];
 });
 
+
 const wikiClient = new MediaWikiClient();
-const aiGenerator = new OpenAIQuestionGenerator(import.meta.env.VITE_OPENAI_API_KEY || 'No Api Key');
+const aiGenerator = new OpenAIQuestionGenerator(settingsState.openAIKey);
 
 const currentQuestion = ref<Question | null>(null);
 const answered = ref(false);

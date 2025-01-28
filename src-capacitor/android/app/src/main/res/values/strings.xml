@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Wiki Millionaire Game</string>
+    <string name="title_activity_main">Wiki Millionaire Game</string>
+    <string name="package_name">com.wikimillionaire.app</string>
+    <string name="custom_url_scheme">com.wikimillionaire.app</string>
+</resources>

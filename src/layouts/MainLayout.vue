@@ -5,13 +5,12 @@
         <q-toolbar-title>
           Wiki Millionaire
         </q-toolbar-title>
-
         <!-- Show player info if game is in progress -->
         <div v-if="gameState.playerName && !gameState.isGameOver">
           Player: {{ gameState.playerName }} |
           Current Prize: ${{ gameState.currentPrize.toLocaleString() }}
         </div>
-
+        <q-separator vertical/>
         <!-- Settings button -->
         <q-btn flat round dense icon="settings" @click="openSettingsDialog" />
       </q-toolbar>
@@ -23,13 +22,14 @@
 
     <!-- Settings dialog -->
     <q-dialog v-model="settingsDialogOpen">
-      <q-card>
+      <q-card style="min-width: 350px; max-width: 90vw" class="q-mt-lg">
         <q-card-section>
           <div class="text-h6">Settings</div>
+          <div class="text-caption">Configure game settings</div>
         </q-card-section>
 
         <q-card-section>
-          <q-input v-model="openAIKey" label="Open AI Key" />
+          <q-input v-model="openAIKey" label="Open AI Key" hint="Enter your Open AI API key" />
         </q-card-section>
 
         <q-card-actions align="right">
@@ -42,16 +42,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue'
 import { useGameStore } from 'src/stores/gameStore';
 import { useSettingsStore } from 'src/stores/settingsStore';
+import { useQuasar } from 'quasar'
 
+const $q = useQuasar();
 const gameStore = useGameStore();
 const settingsStore = useSettingsStore();
 const { gameState } = gameStore;
+const { settingsState } = settingsStore;
 
 const settingsDialogOpen = ref(false);
-const openAIKey = ref(settingsStore.openAIKey);
+const openAIKey = ref(settingsState.openAIKey);
 
 function openSettingsDialog() {
   settingsDialogOpen.value = true;
@@ -60,4 +63,18 @@ function openSettingsDialog() {
 function saveSettings() {
   settingsStore.setOpenAIKey(openAIKey.value);
 }
+
+onMounted(() => {
+  // Check if the openAiKey is set
+  if (!settingsState.openAIKey) {
+    $q.dialog({
+      title: 'Open AI Key Required',
+      message: 'Please enter your Open AI key in settings',
+      persistent: true,
+      ok: 'Go to Settings',
+    }).onOk(() => {
+      openSettingsDialog()
+    })
+  }
+});
 </script>

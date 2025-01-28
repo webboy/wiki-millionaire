@@ -32,7 +32,7 @@ h4 { font-size: $h4-size; }
     padding: 8px $space-md;
 
     &:hover {
-      background: lighten($deep-knowledge-blue, 10%);
+      background: $deep-knowledge-blue;
     }
   }
 }

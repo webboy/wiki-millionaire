@@ -234,7 +234,7 @@ const startGame = async () => {
 
     &.medium {
       background: rgba($victory-gold, 0.1);
-      color: darken($victory-gold, 20%);
+      color: $victory-gold;
     }
 
     &.hard {
