@@ -171,7 +171,7 @@ const loadQuestion = async () => {
       typeof choice === 'string' && choice.length > 0
     );
 
-    const question: Question = {
+    currentQuestion.value = {
       id: uuidv4(),
       text: questionData.question,
       choices: validChoices,
@@ -183,7 +183,7 @@ const loadQuestion = async () => {
       }
     };
 
-    currentQuestion.value = question;
+
     displayedChoices.value = validChoices;
     startTimer();
     loadingQuestion.value = false;
