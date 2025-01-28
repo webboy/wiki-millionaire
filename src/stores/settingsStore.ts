@@ -5,7 +5,7 @@ import type { SettingsState } from '../types/settings';
 
 export const useSettingsStore = defineStore('settings', () => {
   const settingsState = ref<SettingsState>({
-    openAIKey: ''
+    openAIKey: import.meta.env.VITE_OPENAI_KEY || ''
   });
 
   // Watch for changes and save to localStorage

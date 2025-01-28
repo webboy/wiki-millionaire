@@ -192,8 +192,19 @@ const loadQuestion = async () => {
     startTimer();
     loadingQuestion.value = false;
   } catch (error) {
-    console.error('Error loading question:', error);
+    console.error(error);
     loadingQuestion.value = false;
+    $q.dialog({
+      title: 'Error Loading Question',
+      message: 'An error occurred while loading the question. Please try again.',
+      ok: 'Retry',
+      cancel: 'Quit Game',
+      persistent: true
+    }).onOk(() => {
+      void loadQuestion();
+    }).onCancel(() => {
+      void router.push({ name: 'welcome' });
+    })
   }
 };
 
