@@ -28,7 +28,7 @@
           <div class="text-caption">Configure game settings</div>
         </q-card-section>
 
-        <q-card-section>
+        <q-card-section v-if="(openAIKey ==='')">
           <q-input v-model="openAIKey" label="Open AI Key" hint="Enter your Open AI API key" />
         </q-card-section>
 
