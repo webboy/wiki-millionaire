@@ -43,12 +43,17 @@ git clone https://github.com/yourusername/wiki-millionaire.git
 cd wiki-millionaire
 ```
 
-2. **Install dependencies:**
+2. **Install Quasar CLI globally:**
+```bash
+npm install -g @quasar/cli
+```
+
+3. **Install project dependencies:**
 ```bash
 npm install
 ```
 
-3. **Set up environment variables:**
+4. **Set up environment variables:**
    Create a `.env` file in the root directory with:
 ```env
 VITE_OPENAI_KEY=your_openai_api_key_here
@@ -56,13 +61,26 @@ VITE_OPENAI_KEY=your_openai_api_key_here
 
 4. **Run development server:**
 ```bash
-npm run dev
+quasar dev
 ```
 
-5. **Build for production:**
+5. **Build for web production:**
 ```bash
-npm run build
+quasar build
 ```
+
+6. **Build for Android:**
+```bash
+# Install Android development dependencies first:
+# 1. Install Android Studio
+# 2. Install Android SDK
+# 3. Set ANDROID_HOME environment variable
+
+# Then build the Android app:
+quasar build -m android
+```
+
+The Android app will be generated in the `dist/android` directory.
 
 ## Game Structure
 
