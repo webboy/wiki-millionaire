@@ -5,11 +5,6 @@
         <q-toolbar-title>
           Wiki Millionaire
         </q-toolbar-title>
-        <!-- Show player info if game is in progress -->
-        <div v-if="gameState.playerName && !gameState.isGameOver">
-          Player: {{ gameState.playerName }} |
-          Current Prize: ${{ gameState.currentPrize.toLocaleString() }}
-        </div>
         <q-separator vertical/>
         <!-- Settings button -->
         <q-btn flat round dense icon="settings" @click="openSettingsDialog" />
@@ -43,14 +38,11 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useGameStore } from 'src/stores/gameStore';
 import { useSettingsStore } from 'src/stores/settingsStore';
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar();
-const gameStore = useGameStore();
 const settingsStore = useSettingsStore();
-const { gameState } = gameStore;
 const { settingsState } = settingsStore;
 
 const settingsDialogOpen = ref(false);

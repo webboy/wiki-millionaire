@@ -1,5 +1,7 @@
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
+export type LifelineId = 'extend-time' | 'remove-half-options';
+
 export enum QuestionDifficulty {
   EASY = 'easy',
   MEDIUM = 'medium',
@@ -45,6 +47,7 @@ export interface Question {
   correctAnswerIndex: number;
   difficulty: QuestionDifficulty;
   hint: string;
+  showHint: boolean;
   wikiSource: {
     pageId: string;
     title: string;
@@ -53,7 +56,7 @@ export interface Question {
 }
 
 export interface Lifeline {
-  id: string;
+  id: LifelineId;
   name: string;
   description: string;
   icon: string;

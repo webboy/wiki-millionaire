@@ -26,31 +26,31 @@
           />
           <div class="col-auto row q-gutter-md">
             <q-btn
-              v-for="(available, type) in gameState.lifelinesRemaining"
+              v-for="(lifeline, type) in lifelines"
               :key="type"
-              :class="['lifeline-button', { 'lifeline-used': !available }]"
-              :color="available ? 'primary' : 'grey-5'"
+              :class="['lifeline-button', { 'lifeline-used': lifeline.isUsed }]"
+              :color="lifeline.isUsed ? 'grey-5' : 'primary'"
               round
-              :disable="!available"
-              @click="confirmLifeline(type as 'extendTime' | 'split')"
+              :disable="lifeline.isUsed"
+              @click="confirmLifeline(lifeline)"
             >
-              <q-icon :name="getLifelineIcon(type)" size="md" />
-              <q-tooltip>{{ getLifelineTooltip(type) }}</q-tooltip>
+              <q-icon :name="lifeline.icon" size="md" />
+              <q-tooltip>{{ lifeline.description }}</q-tooltip>
             </q-btn>
           </div>
         </div>
 
         <!-- Question section -->
         <q-card :class="'question-card q-pa-lg ' + getQuestionBackgroundClass(currentQuestion)">
-          <div v-if="loadingQuestion" class="text-h5 text-center q-mb-xl">
+          <q-card-section v-if="loadingQuestion" class="text-h5 text-center q-mb-xl">
             <q-spinner-clock /> Loading question...
-          </div>
+          </q-card-section>
           <div v-else>
-            <div class="text-h5 q-mb-xl text-primary text-center">
-              {{ currentQuestion?.text }}
-            </div>
+            <q-card-section class="text-h5 q-mb-xl text-primary text-center">
+              <span class="text-bold">Hint:</span> {{ currentQuestion?.text }}
+            </q-card-section>
 
-            <div class="row q-col-gutter-md justify-center">
+            <q-card-section class="row q-col-gutter-md justify-center">
               <div v-for="(choice, index) in displayedChoices" :key="index" class="col-12 col-sm-6">
                 <q-btn
                   :label="choice"
@@ -60,8 +60,14 @@
                   @click="submitAnswer(index)"
                 />
               </div>
-            </div>
+            </q-card-section>
+            <q-card-section>
+              <div class="text-body1 q-col-gutter-md justify-center">
+                {{ currentQuestion?.hint }}
+              </div>
+            </q-card-section>
           </div>
+
         </q-card>
 
         <!-- Source citation -->
@@ -107,11 +113,13 @@ import { useSettingsStore } from 'src/stores/settingsStore'
 import { GAME_SETTINGS } from 'src/config/gameSettings'
 import { MediaWikiClient } from 'src/services/wiki/mediaWikiClient'
 import { OpenAIQuestionGenerator } from 'src/services/ai/openAiGenerator'
-import type { Question } from 'src/types/game'
+import type { Lifeline, Question } from 'src/types/game'
 import { QuestionDifficulty } from 'src/types/game'
 import GameTimer from 'src/components/game/GameTimer.vue'
 import PrizeLadder from 'src/components/game/PrizeLadder.vue'
 import { v4 as uuidv4 } from 'uuid'
+import { ExtendTimeLifeline } from 'src/composables/lifelines/extendTimeLifeline'
+import { RemoveHalfOptionsLifeline } from 'src/composables/lifelines/removeHalfOptionsLifeline'
 
 const router = useRouter();
 const $q = useQuasar();
@@ -129,22 +137,19 @@ const settings = computed(() => {
 const wikiClient = new MediaWikiClient();
 const aiGenerator = new OpenAIQuestionGenerator(settingsState.openAIKey);
 
-const currentQuestion = ref<Question | null>(null);
+const currentQuestion = computed(() => gameStore.gameState.currentQuestion);
 const currentQuestionIndex = ref(0);
 const currentQuestionDifficulty = ref(QuestionDifficulty.EASY);
 
 const answered = ref(false);
-const displayedChoices = ref<string[]>([]);
+const displayedChoices = computed(() => currentQuestion.value?.choices || []);
 const timerInterval = ref<number>();
 const loadingQuestion = ref(false);
 
-const getLifelineIcon = (type: string) => {
-  return type === 'extendTime' ? 'timer' : 'call_split';
-};
-
-const getLifelineTooltip = (type: string) => {
-  return type === 'extendTime' ? 'Add 30 seconds' : 'Remove half of wrong answers';
-};
+const lifelines = ref([
+  new ExtendTimeLifeline(),
+  new RemoveHalfOptionsLifeline()
+])
 
 const getQuestionBackgroundClass = (question: Question | null) => {
   if (!question) return '';
@@ -160,14 +165,14 @@ const getQuestionBackgroundClass = (question: Question | null) => {
   }
 };
 
-const confirmLifeline = (type: 'extendTime' | 'split') => {
+const confirmLifeline = (lifeline: Lifeline) => {
   $q.dialog({
     title: 'Use Lifeline',
-    message: `Are you sure you want to use ${type === 'extendTime' ? 'Time Extension' : 'Split'} lifeline?`,
+    message: `Are you sure you want to use ${lifeline.name}?`,
     cancel: true,
     persistent: true
   }).onOk(() => {
-    handleLifeline(type);
+    lifeline.call()
   });
 };
 
@@ -211,6 +216,7 @@ const loadQuestion = async () => {
       correctAnswerIndex: questionData.correctAnswerIndex,
       difficulty: currentQuestionDifficulty.value,
       hint: questionData.hint,
+      showHint: false,
       wikiSource: {
         pageId: wikiPage.pageId,
         title: wikiPage.title,
@@ -218,7 +224,6 @@ const loadQuestion = async () => {
       }
     };
 
-    displayedChoices.value = validChoices;
     startTimer();
     loadingQuestion.value = false;
   } catch (error) {
@@ -268,34 +273,6 @@ const handleTimeUp = () => {
   }, 2000);
 };
 
-const handleLifeline = (type: 'extendTime' | 'split') => {
-  if (type === 'extendTime') {
-    // Add 30 seconds to current time
-    const newTime = gameState.value.timeRemaining + 30;
-    gameStore.updateTimer(newTime);
-  } else if (type === 'split' && currentQuestion.value) {
-    const correctIndex = currentQuestion.value.correctAnswerIndex;
-    const correctAnswer = currentQuestion.value.choices[correctIndex];
-
-    // Get array of wrong answers
-    const wrongAnswers = currentQuestion.value.choices
-      .filter((_, index) => index !== correctIndex);
-
-    // Keep only half of wrong answers
-    const keepCount = Math.floor(wrongAnswers.length / 2);
-    const keptWrong = wrongAnswers
-      .sort(() => Math.random() - 0.5)
-      .slice(0, keepCount);
-
-    // Filter out undefined values
-    displayedChoices.value = [correctAnswer, ...keptWrong]
-      .filter((choice): choice is string => choice !== undefined)
-      .sort(() => Math.random() - 0.5);
-  }
-
-  gameStore.useLifeline(type);
-};
-
 const submitAnswer = (index: number) => {
   if (!currentQuestion.value) return;
 
@@ -309,7 +286,7 @@ const submitAnswer = (index: number) => {
       await router.push({ name: 'gameOver' });
     } else {
       answered.value = false;
-      currentQuestion.value = null;
+      gameStore.gameState.currentQuestion = null;
       await loadQuestion();
     }
   };
