@@ -47,7 +47,7 @@
           </q-card-section>
           <div v-else>
             <q-card-section class="text-h5 q-mb-xl text-primary text-center">
-              <span class="text-bold">Hint:</span> {{ currentQuestion?.text }}
+              {{ currentQuestion?.text }} asasasas
             </q-card-section>
 
             <q-card-section class="row q-col-gutter-md justify-center">
