@@ -61,7 +61,7 @@
                 />
               </div>
             </q-card-section>
-            <q-card-section>
+            <q-card-section v-if="currentQuestion?.showHint">
               <div class="text-body1 q-col-gutter-md justify-center">
                 <span class="text-bold">Hint: </span> {{ currentQuestion?.hint }}
               </div>
