@@ -7,7 +7,7 @@ import { GAME_SETTINGS } from '../config/gameSettings';
 export const useGameStore = defineStore('game', () => {
   const gameState = ref<GameState>({
     playerName: '',
-    difficulty: 'medium',
+    difficulty: 'easy',
     currentQuestionIndex: 0,
     currentQuestion: null,
     timeRemaining: 0,
@@ -15,7 +15,8 @@ export const useGameStore = defineStore('game', () => {
     guaranteedPrize: 0,
     lifelinesRemaining: {
       extendTime: true,
-      split: true
+      split: true,
+      showHint: true
     },
     isGameOver: false,
     hasWon: false
@@ -49,10 +50,11 @@ export const useGameStore = defineStore('game', () => {
       guaranteedPrize: 0,
       lifelinesRemaining: {
         extendTime: true,
-        split: true
+        split: true,
+        showHint: true
       },
       isGameOver: false,
-      hasWon: false
+      hasWon: false,
     };
   };
 

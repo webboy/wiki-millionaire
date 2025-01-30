@@ -9,6 +9,7 @@ export class ExtendTimeLifeline implements Lifeline {
     // Add 30 seconds to the timer
     const newTime = gameStore.gameState.timeRemaining + 30;
     gameStore.updateTimer(newTime);
+    gameStore.gameState.lifelinesRemaining.extendTime = false;
     this.isUsed = true;
   }
   description: string = 'Add 30 seconds to the timer'

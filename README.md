@@ -9,21 +9,23 @@ Wiki Millionaire is a unique twist on the classic quiz show format. Instead of p
 ## Features
 
 - **Three Difficulty Levels:**
-    - 🟢 Easy: 5 questions, 120 seconds per question, 3 choices
-    - 🟡 Medium: 10 questions, 90 seconds per question, 4 choices
-    - 🔴 Hard: 15 questions, 60 seconds per question, 6 choices
+    - 🟢 Easy: 5 questions, 120 seconds per question, 3 choices, simpler topics
+    - 🟡 Medium: 10 questions, 90 seconds per question, 4 choices, moderate complexity
+    - 🔴 Hard: 15 questions, 60 seconds per question, 6 choices, advanced topics
 
 - **Dynamic Question Generation:**
     - Random Wikipedia article selection
     - AI-powered question generation using OpenAI's GPT-4
     - Questions based on article content with multiple-choice answers
+    - Progressive difficulty within each game level
 
 - **Classic Game Elements:**
     - Progressive prize ladder
     - Safety nets for securing winnings
-    - Two lifelines:
+    - Three lifelines:
         - ⏰ Time Extension (adds 30 seconds)
         - ✂️ Split (removes half of wrong answers)
+        - 💡 Hint (provides a helpful clue about the correct answer)
 
 ## Technical Stack
 
@@ -49,7 +51,7 @@ npm install
 3. **Set up environment variables:**
    Create a `.env` file in the root directory with:
 ```env
-OPENAI_API_KEY=your_openai_api_key_here
+VITE_OPENAI_KEY=your_openai_api_key_here
 ```
 
 4. **Run development server:**
@@ -67,17 +69,18 @@ npm run build
 ```
 src/
 ├── components/        # Game UI components
-│   └── game/
-│       ├── GameTimer.vue
-│       ├── GameLifelines.vue
-│       └── PrizeLadder.vue
-├── pages/            # Main game pages
-│   ├── WelcomePage.vue
-│   ├── GamePage.vue
-│   └── GameOverPage.vue
-├── services/         # External service integrations
-│   ├── wiki/        # Wikipedia API client
-│   └── ai/          # OpenAI integration
+├── composables/       # Reusable composition logic
+│   └── lifelines/
+│       ├── extendTimeLifeline.ts
+│       ├── removeHalfOptionsLifeline.ts
+│       └── showHintLifeline.ts
+├── config/           # Configuration files
+├── css/             # Styling
+├── i18n/            # Internationalization
+├── pages/           # Main game pages
+├── services/        # External service integrations
+│   ├── wiki/       # Wikipedia API client
+│   └── ai/         # OpenAI integration
 ├── stores/          # Pinia state management
 └── types/           # TypeScript type definitions
 ```

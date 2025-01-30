@@ -25,6 +25,7 @@ export class RemoveHalfOptionsLifeline implements Lifeline{
         .filter((choice): choice is string => choice !== undefined)
         .sort(() => Math.random() - 0.5);
       this.isUsed = true;
+      gameStore.gameState.lifelinesRemaining.split = false;
     }
   }
 

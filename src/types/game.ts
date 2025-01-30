@@ -1,6 +1,6 @@
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
-export type LifelineId = 'extend-time' | 'remove-half-options';
+export type LifelineId = 'extend-time' | 'remove-half-options' | 'show-hint';
 
 export enum QuestionDifficulty {
   EASY = 'easy',
@@ -35,6 +35,7 @@ export interface GameState {
   lifelinesRemaining: {
     extendTime: boolean;
     split: boolean;
+    showHint: boolean;
   };
   isGameOver: boolean;
   hasWon: boolean;

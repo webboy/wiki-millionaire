@@ -67,9 +67,7 @@
               </div>
             </q-card-section>
           </div>
-
         </q-card>
-
         <!-- Source citation -->
         <div class="text-caption q-mt-md text-center" v-if="currentQuestion?.wikiSource">
           Source: {{ currentQuestion.wikiSource.title }}
@@ -120,6 +118,7 @@ import PrizeLadder from 'src/components/game/PrizeLadder.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { ExtendTimeLifeline } from 'src/composables/lifelines/extendTimeLifeline'
 import { RemoveHalfOptionsLifeline } from 'src/composables/lifelines/removeHalfOptionsLifeline'
+import { ShowHintLifeline } from 'src/composables/lifelines/showHintLifeline'
 
 const router = useRouter();
 const $q = useQuasar();
@@ -148,7 +147,8 @@ const loadingQuestion = ref(false);
 
 const lifelines = ref([
   new ExtendTimeLifeline(),
-  new RemoveHalfOptionsLifeline()
+  new RemoveHalfOptionsLifeline(),
+  new ShowHintLifeline()
 ])
 
 const getQuestionBackgroundClass = (question: Question | null) => {
@@ -223,8 +223,6 @@ const loadQuestion = async () => {
         url: wikiPage.url
       }
     };
-
-    startTimer();
     loadingQuestion.value = false;
   } catch (error) {
     console.error(error);
@@ -306,7 +304,13 @@ const getChoiceColor = (index: number) => {
 };
 
 onMounted(() => {
-  void loadQuestion();
+  if (currentQuestion.value === null) {
+    void loadQuestion().then(() => {
+      startTimer();
+    });
+  } else {
+    startTimer();
+  }
 });
 
 onUnmounted(() => {

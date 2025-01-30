@@ -40,22 +40,18 @@
 
         <!-- Lifelines Usage -->
         <div class="row q-col-gutter-md q-mb-lg">
-          <div class="col-xs-12 col-sm-6">
+          <div class="col-12">
             <q-card flat bordered class="bg-grey-3">
               <q-card-section>
-                <div class="text-subtitle2">Time Extensions Used</div>
-                <div class="text-h6">
-                  {{ gameState.lifelinesRemaining.extendTime ? 'No' : 'Yes' }}
+                <div class="text-subtitle2">Used lifelines:</div>
+                <div class="text-caption">
+                  Extend Time: {{ gameState.lifelinesRemaining.extendTime ? 'No' : 'Yes' }}
                 </div>
-              </q-card-section>
-            </q-card>
-          </div>
-          <div class="col-xs-12 col-sm-6">
-            <q-card flat bordered class="bg-grey-3">
-              <q-card-section>
-                <div class="text-subtitle2">Splits Used</div>
-                <div class="text-h6">
-                  {{ gameState.lifelinesRemaining.split ? 'No' : 'Yes' }}
+                <div class="text-caption">
+                  Hide Half: {{ gameState.lifelinesRemaining.split ? 'No' : 'Yes' }}
+                </div>
+                <div class="text-caption">
+                  Extend Time: {{ gameState.lifelinesRemaining.showHint ? 'No' : 'Yes' }}
                 </div>
               </q-card-section>
             </q-card>

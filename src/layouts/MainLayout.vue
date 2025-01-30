@@ -23,7 +23,8 @@
           <div class="text-caption">Configure game settings</div>
         </q-card-section>
 
-        <q-card-section v-if="(openAIKey ==='')">
+        <q-card-section>
+          <div class="text-caption">If the default Open AI key does not work. You can use your own, just make sure it has access to <code>gpt-4o-mini</code> model.</div>
           <q-input v-model="openAIKey" label="Open AI Key" hint="Enter your Open AI API key" />
         </q-card-section>
 
