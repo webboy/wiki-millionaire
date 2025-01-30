@@ -20,7 +20,8 @@
       <q-card style="min-width: 350px; max-width: 90vw" class="q-mt-lg">
         <q-card-section>
           <div class="text-h6">Settings</div>
-          <div class="text-caption">Configure game settings</div>
+          <div class="text-caption">Wiki Millionaire game settings</div>
+          <div class="text-caption">Version: {{ AppVersion }}</div>
         </q-card-section>
 
         <q-card-section>
@@ -48,6 +49,7 @@ const { settingsState } = settingsStore;
 
 const settingsDialogOpen = ref(false);
 const openAIKey = ref(settingsState.openAIKey);
+const AppVersion = ref(import.meta.env.VITE_APP_VERSION);
 
 function openSettingsDialog() {
   settingsDialogOpen.value = true;

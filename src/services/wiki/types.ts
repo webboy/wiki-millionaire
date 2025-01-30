@@ -3,6 +3,7 @@ export interface WikiPage {
   title: string;
   summary: string;
   url: string;
+  language: string;
 }
 
 export interface WikiClient {
