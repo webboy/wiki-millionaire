@@ -8,7 +8,7 @@ export const useGameStore = defineStore('game', () => {
   const gameState = ref<GameState>({
     playerName: '',
     difficulty: 'medium',
-    currentQuestion: 0,
+    currentQuestionIndex: 0,
     timeRemaining: 0,
     currentPrize: 0,
     guaranteedPrize: 0,
@@ -41,7 +41,7 @@ export const useGameStore = defineStore('game', () => {
     gameState.value = {
       playerName,
       difficulty,
-      currentQuestion: 0,
+      currentQuestionIndex: 0,
       timeRemaining: settings.timePerQuestion,
       currentPrize: 0,
       guaranteedPrize: 0,
@@ -75,16 +75,16 @@ export const useGameStore = defineStore('game', () => {
 
   const answerQuestion = (isCorrect: boolean, settings: GameSettings): void => {
     if (isCorrect) {
-      gameState.value.currentPrize = settings.moneyProgression[gameState.value.currentQuestion] ?? 0;
+      gameState.value.currentPrize = settings.moneyProgression[gameState.value.currentQuestionIndex] ?? 0;
 
       // Update guaranteed prize if at safety net
-      if ((gameState.value.currentQuestion + 1) % settings.safetyNetFrequency === 0) {
+      if ((gameState.value.currentQuestionIndex + 1) % settings.safetyNetFrequency === 0) {
         gameState.value.guaranteedPrize = gameState.value.currentPrize;
       }
 
-      gameState.value.currentQuestion++;
+      gameState.value.currentQuestionIndex++;
 
-      if (gameState.value.currentQuestion >= settings.questionsCount) {
+      if (gameState.value.currentQuestionIndex >= settings.questionsCount) {
         gameOver(true);
       } else {
         gameState.value.timeRemaining = settings.timePerQuestion;

@@ -24,7 +24,7 @@
             <q-card flat bordered class="bg-grey-3">
               <q-card-section>
                 <div class="text-subtitle2">Questions Answered</div>
-                <div class="text-h6">{{ gameState.currentQuestion }}</div>
+                <div class="text-h6">{{ gameState.currentQuestionIndex }}</div>
               </q-card-section>
             </q-card>
           </div>

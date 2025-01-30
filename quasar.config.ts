@@ -56,7 +56,7 @@ export default defineConfig((ctx) => {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      publicPath: '/wiki-millionaire/',
+      //publicPath: '/wiki-millionaire/',
       // analyze: true,
       // env: {},
       // rawDefine: {}

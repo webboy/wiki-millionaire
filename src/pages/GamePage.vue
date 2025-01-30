@@ -28,10 +28,7 @@
             <q-btn
               v-for="(available, type) in gameState.lifelinesRemaining"
               :key="type"
-              :class="[
-                'lifeline-button',
-                { 'lifeline-used': !available }
-              ]"
+              :class="['lifeline-button', { 'lifeline-used': !available }]"
               :color="available ? 'primary' : 'grey-5'"
               round
               :disable="!available"
@@ -44,9 +41,9 @@
         </div>
 
         <!-- Question section -->
-        <q-card class="question-card q-pa-lg">
+        <q-card :class="'question-card q-pa-lg ' + getQuestionBackgroundClass(currentQuestion)">
           <div v-if="loadingQuestion" class="text-h5 text-center q-mb-xl">
-            <q-spinner-clock/> Loading question...
+            <q-spinner-clock /> Loading question...
           </div>
           <div v-else>
             <div class="text-h5 q-mb-xl text-primary text-center">
@@ -54,11 +51,7 @@
             </div>
 
             <div class="row q-col-gutter-md justify-center">
-              <div
-                v-for="(choice, index) in displayedChoices"
-                :key="index"
-                class="col-12 col-sm-6"
-              >
+              <div v-for="(choice, index) in displayedChoices" :key="index" class="col-12 col-sm-6">
                 <q-btn
                   :label="choice"
                   class="choice-button full-width"
@@ -84,7 +77,9 @@
           <div class="text-h6">{{ gameState.playerName }}</div>
           <div class="text-subtitle1 q-mt-md">
             Current Prize:
-            <span class="text-primary text-weight-bold">${{ gameState.currentPrize.toLocaleString() }}</span>
+            <span class="text-primary text-weight-bold"
+              >${{ gameState.currentPrize.toLocaleString() }}</span
+            >
           </div>
           <div class="text-subtitle2">
             Guaranteed:
@@ -94,7 +89,7 @@
         <q-card-section>
           <prize-ladder
             :prizes="settings.moneyProgression"
-            :current-question="gameState.currentQuestion"
+            :current-question="gameState.currentQuestionIndex"
             :safety-net-frequency="settings.safetyNetFrequency"
           />
         </q-card-section>
@@ -104,18 +99,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { useGameStore } from 'src/stores/gameStore';
-import { useSettingsStore } from 'src/stores/settingsStore';
-import { GAME_SETTINGS } from 'src/config/gameSettings';
-import { MediaWikiClient } from 'src/services/wiki/mediaWikiClient';
-import { OpenAIQuestionGenerator } from 'src/services/ai/openAiGenerator';
-import type { Question } from 'src/types/game';
-import GameTimer from 'src/components/game/GameTimer.vue';
-import PrizeLadder from 'src/components/game/PrizeLadder.vue';
-import { v4 as uuidv4 } from 'uuid';
+import { useGameStore } from 'src/stores/gameStore'
+import { useSettingsStore } from 'src/stores/settingsStore'
+import { GAME_SETTINGS } from 'src/config/gameSettings'
+import { MediaWikiClient } from 'src/services/wiki/mediaWikiClient'
+import { OpenAIQuestionGenerator } from 'src/services/ai/openAiGenerator'
+import type { Question } from 'src/types/game'
+import { QuestionDifficulty } from 'src/types/game'
+import GameTimer from 'src/components/game/GameTimer.vue'
+import PrizeLadder from 'src/components/game/PrizeLadder.vue'
+import { v4 as uuidv4 } from 'uuid'
 
 const router = useRouter();
 const $q = useQuasar();
@@ -134,6 +130,9 @@ const wikiClient = new MediaWikiClient();
 const aiGenerator = new OpenAIQuestionGenerator(settingsState.openAIKey);
 
 const currentQuestion = ref<Question | null>(null);
+const currentQuestionIndex = ref(0);
+const currentQuestionDifficulty = ref(QuestionDifficulty.EASY);
+
 const answered = ref(false);
 const displayedChoices = ref<string[]>([]);
 const timerInterval = ref<number>();
@@ -145,6 +144,20 @@ const getLifelineIcon = (type: string) => {
 
 const getLifelineTooltip = (type: string) => {
   return type === 'extendTime' ? 'Add 30 seconds' : 'Remove half of wrong answers';
+};
+
+const getQuestionBackgroundClass = (question: Question | null) => {
+  if (!question) return '';
+  if (question.difficulty === QuestionDifficulty.EASY)
+  {
+    return 'bg-green-3';
+  } else if (question.difficulty === QuestionDifficulty.MEDIUM)
+  {
+    return 'bg-orange-3';
+  } else
+  {
+    return 'bg-red-3';
+  }
 };
 
 const confirmLifeline = (type: 'extendTime' | 'split') => {
@@ -160,11 +173,27 @@ const confirmLifeline = (type: 'extendTime' | 'split') => {
 
 const loadQuestion = async () => {
   loadingQuestion.value = true;
+  currentQuestionIndex.value++;
+
+
+  //Use settings to determine the difficulty of the question
+  if (currentQuestionIndex.value <= settings.value.difficultyDistribution.easy)
+  {
+    currentQuestionDifficulty.value = QuestionDifficulty.EASY;
+  } else if (currentQuestionIndex.value <= settings.value.difficultyDistribution.easy + settings.value.difficultyDistribution.medium)
+  {
+    currentQuestionDifficulty.value = QuestionDifficulty.MEDIUM;
+  } else
+  {
+    currentQuestionDifficulty.value = QuestionDifficulty.HARD;
+  }
+
   try {
     const wikiPage = await wikiClient.getRandomPage();
     const questionData = await aiGenerator.generateQuestion(
       wikiPage.summary,
-      settings.value.choicesCount
+      settings.value.choicesCount,
+      currentQuestionDifficulty.value
     );
 
     if (!questionData.choices || !Array.isArray(questionData.choices)) {
@@ -175,18 +204,19 @@ const loadQuestion = async () => {
       typeof choice === 'string' && choice.length > 0
     );
 
-    currentQuestion.value = {
+    gameStore.gameState.currentQuestion = {
       id: uuidv4(),
       text: questionData.question,
       choices: validChoices,
       correctAnswerIndex: questionData.correctAnswerIndex,
+      difficulty: currentQuestionDifficulty.value,
+      hint: questionData.hint,
       wikiSource: {
         pageId: wikiPage.pageId,
         title: wikiPage.title,
         url: wikiPage.url
       }
     };
-
 
     displayedChoices.value = validChoices;
     startTimer();
@@ -309,5 +339,4 @@ onUnmounted(() => {
 });
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

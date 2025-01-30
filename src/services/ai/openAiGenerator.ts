@@ -1,5 +1,6 @@
 import { OpenAI } from 'openai';
 import type { QuestionGenerator } from './types';
+import type { QuestionDifficulty } from 'src/types/game'
 
 export class OpenAIQuestionGenerator implements QuestionGenerator {
   private openai: OpenAI;
@@ -8,9 +9,10 @@ export class OpenAIQuestionGenerator implements QuestionGenerator {
     this.openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
   }
 
-  async generateQuestion(wikiSummary: string, choicesCount: number) {
+  async generateQuestion(wikiSummary: string, choicesCount: number, difficulty: QuestionDifficulty) {
     const prompt = `
-      Generate a multiple choice question based on this Wikipedia summary.
+      Generate a ${difficulty.toLowerCase()} difficulty multiple choice question based on this Wikipedia summary.
+      You also need to generate a hint for the question. The hint is a sentence that provides a clue to the correct answer.
       Respond ONLY with a JSON object, no other text or formatting.
 
       Summary: "${wikiSummary}"
@@ -20,6 +22,7 @@ export class OpenAIQuestionGenerator implements QuestionGenerator {
         "question": "question text here",
         "choices": ["option 1", "option 2", ... (exactly ${choicesCount} options)],
         "correctAnswerIndex": number (0-based index of correct answer)
+        "hint": "hint text here"
       }
     `;
 

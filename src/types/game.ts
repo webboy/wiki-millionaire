@@ -1,5 +1,17 @@
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
+export enum QuestionDifficulty {
+  EASY = 'easy',
+  MEDIUM = 'medium',
+  HARD = 'hard'
+}
+
+export interface DifficultyDistribution {
+  easy: number;
+  medium: number;
+  hard: number;
+}
+
 export interface GameSettings {
   difficulty: Difficulty;
   questionsCount: number;
@@ -7,12 +19,14 @@ export interface GameSettings {
   choicesCount: number;
   safetyNetFrequency: number;
   moneyProgression: number[];
+  difficultyDistribution: DifficultyDistribution;
 }
 
 export interface GameState {
   playerName: string;
   difficulty: Difficulty;
-  currentQuestion: number;
+  currentQuestionIndex: number;
+  currentQuestion: Question | null;
   timeRemaining: number;
   currentPrize: number;
   guaranteedPrize: number;
@@ -29,9 +43,20 @@ export interface Question {
   text: string;
   choices: string[];
   correctAnswerIndex: number;
+  difficulty: QuestionDifficulty;
+  hint: string;
   wikiSource: {
     pageId: string;
     title: string;
     url: string;
   };
+}
+
+export interface Lifeline {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  isUsed: boolean;
+  call: () => void;
 }
