@@ -6,6 +6,12 @@ A quiz game inspired by "Who Wants to Be a Millionaire?" that generates question
 
 Wiki Millionaire is a unique twist on the classic quiz show format. Instead of pre-written questions, the game dynamically generates questions from random Wikipedia articles using AI, creating an endless supply of fresh and interesting challenges.
 
+## Demo
+
+Demo version is hosted on Firebase:
+
+🚀 **[Play the Game](https://wiki-milionaire.firebaseapp.com/)**
+
 ## Features
 
 - **Three Difficulty Levels:**
