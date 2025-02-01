@@ -82,7 +82,8 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { useGameStore } from 'src/stores/gameStore';
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
+import { gameAnalytics } from 'src/services/analytics/firebase'
 
 const router = useRouter();
 const gameStore = useGameStore();
@@ -98,6 +99,15 @@ const newGame = async () => {
   // Go back to welcome screen for new settings
   await router.push({ name: 'welcome' });
 };
+
+onMounted(() => {
+  gameAnalytics.logGameEnd({
+    difficulty: gameState.value.difficulty,
+    questionsAnswered: gameState.value.currentQuestionIndex,
+    finalPrize: gameState.value.currentPrize,
+  });
+});
+
 </script>
 
 <style lang="scss" scoped>

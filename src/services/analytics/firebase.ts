@@ -1,7 +1,7 @@
 // src/services/analytics/firebase.ts
 import { getAnalytics, logEvent } from 'firebase/analytics';
 import type { Analytics } from 'firebase/analytics';
-import type { Difficulty } from 'src/types/game'
+import type { Difficulty, LifelineId } from 'src/types/game'
 
 export class GameAnalytics {
   private readonly analytics: Analytics;
@@ -19,11 +19,9 @@ export class GameAnalytics {
   }
 
   public logGameEnd(params: {
-    difficulty: string;
+    difficulty: Difficulty;
     questionsAnswered: number;
     finalPrize: number;
-    timeSpent: number;
-    completed: boolean;
   }): void {
     logEvent(this.analytics, 'game_end', {
       ...params,
@@ -46,35 +44,11 @@ export class GameAnalytics {
 
   // Lifeline Events
   public logLifelineUse(params: {
-    type: 'time_extension' | 'split';
+    type: LifelineId;
     questionNumber: number;
-    prizeLevel: number;
+    difficulty: Difficulty;
   }): void {
     logEvent(this.analytics, 'lifeline_use', {
-      ...params,
-      timestamp: new Date().toISOString()
-    });
-  }
-
-  // Safety Net Events
-  public logSafetyNetReached(params: {
-    level: number;
-    questionNumber: number;
-    timeSpent: number;
-  }): void {
-    logEvent(this.analytics, 'safety_net_reached', {
-      ...params,
-      timestamp: new Date().toISOString()
-    });
-  }
-
-  // Timeout Events
-  public logTimeout(params: {
-    questionNumber: number;
-    prizeLevel: number;
-    totalTimeSpent: number;
-  }): void {
-    logEvent(this.analytics, 'timeout', {
       ...params,
       timestamp: new Date().toISOString()
     });

@@ -112,7 +112,7 @@ import { useLanguageStore } from 'stores/language'
 import { GAME_SETTINGS } from 'src/config/gameSettings'
 import { MediaWikiClient } from 'src/services/wiki/mediaWikiClient'
 import { OpenAIQuestionGenerator } from 'src/services/ai/openAiGenerator'
-import type { Lifeline, Question } from 'src/types/game'
+import type { Lifeline, LifelineId, Question } from 'src/types/game'
 import { QuestionDifficulty } from 'src/types/game'
 import GameTimer from 'src/components/game/GameTimer.vue'
 import PrizeLadder from 'src/components/game/PrizeLadder.vue'
@@ -178,7 +178,15 @@ const confirmLifeline = (lifeline: Lifeline) => {
     cancel: true,
     persistent: true
   }).onOk(() => {
+    // Use the lifeline
     lifeline.call()
+
+    // Log analytics event
+    gameAnalytics.logLifelineUse({
+      type: lifeline.id,
+      questionNumber: currentQuestionIndex.value,
+      difficulty: currentQuestionDifficulty.value
+    })
   });
 };
 
