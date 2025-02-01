@@ -36,7 +36,6 @@
               <q-icon name="person" color="deep-knowledge-blue" />
             </template>
           </q-input>
-
           <!-- Difficulty Selection -->
           <div>
             <div class="text-h6 q-mb-sm text-deep-knowledge-blue">{{ $t('pages.welcome.select_difficulty')}}:</div>
@@ -106,7 +105,6 @@
 
 
     </q-card>
-
     <!-- Rules Dialog -->
     <q-dialog v-model="rulesDialog">
       <q-card style="min-width: 350px">
@@ -141,6 +139,7 @@ import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const gameStore = useGameStore();
+
 const rulesDialog = ref(false);
 const t = useI18n().t;
 

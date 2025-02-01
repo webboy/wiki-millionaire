@@ -14,9 +14,9 @@ export const useGameStore = defineStore('game', () => {
     currentPrize: 0,
     guaranteedPrize: 0,
     lifelinesRemaining: {
-      extendTime: true,
-      split: true,
-      showHint: true
+      extend_time: true,
+      fifty_fifty: true,
+      show_hint: true
     },
     isGameOver: false,
     hasWon: false
@@ -49,9 +49,9 @@ export const useGameStore = defineStore('game', () => {
       currentPrize: 0,
       guaranteedPrize: 0,
       lifelinesRemaining: {
-        extendTime: true,
-        split: true,
-        showHint: true
+        extend_time: true,
+        fifty_fifty: true,
+        show_hint: true
       },
       isGameOver: false,
       hasWon: false,
@@ -65,15 +65,6 @@ export const useGameStore = defineStore('game', () => {
       gameOver(false);
     } else {
       gameState.value.timeRemaining = timeRemaining;
-    }
-  };
-
-  const useLifeline = (lifeline: 'extendTime' | 'split'): void => {
-    if (gameState.value.lifelinesRemaining[lifeline]) {
-      gameState.value.lifelinesRemaining[lifeline] = false;
-      if (lifeline === 'extendTime') {
-        gameState.value.timeRemaining += 30;
-      }
     }
   };
 
@@ -114,7 +105,6 @@ export const useGameStore = defineStore('game', () => {
     gameState,
     startGame,
     updateTimer,
-    useLifeline,
     answerQuestion,
     gameOver,
     getGameState

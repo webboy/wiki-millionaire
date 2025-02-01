@@ -13,7 +13,8 @@ export class MediaWikiClient implements WikiClient {
     pt: 'https://pt.wikipedia.org/w/api.php',
     ru: 'https://ru.wikipedia.org/w/api.php',
     ja: 'https://ja.wikipedia.org/w/api.php',
-    zh: 'https://zh.wikipedia.org/w/api.php'
+    zh: 'https://zh.wikipedia.org/w/api.php',
+    sr: 'https://sr.wikipedia.org/w/api.php',
     // Add more languages as needed
   };
 
@@ -26,6 +27,8 @@ export class MediaWikiClient implements WikiClient {
   async getRandomPage(language: string = 'en'): Promise<WikiPage> {
 
     const apiBase = this.getApiBase(language);
+
+    console.log('apiBase', apiBase);
 
     const params = {
       action: 'query',

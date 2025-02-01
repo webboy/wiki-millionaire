@@ -5,14 +5,14 @@
       <!-- Result Header -->
       <q-card-section class="text-center">
         <div class="text-h3 text-weight-bold" :class="gameState.hasWon ? 'text-positive' : 'text-negative'">
-          {{ gameState.hasWon ? 'Congratulations!' : 'Game Over' }}
+          {{ gameState.hasWon ? $t('pages.game_over.congrats') : $t('pages.game_over.game_over') }}
         </div>
         <div class="text-h5">{{ gameState.playerName }}</div>
       </q-card-section>
       <!-- Prize Information -->
       <q-card-section class="text-center">
         <div class="text-h6 q-mb-md">
-          {{ gameState.hasWon ? 'You won' : 'You won' }}
+          {{ $t('pages.game_over.you_won') }}
         </div>
         <div class="text-h4 text-primary q-mb-lg">
           ${{ gameState.currentPrize.toLocaleString() }}
@@ -23,7 +23,7 @@
           <div class="col-xs-12 col-sm-6">
             <q-card flat bordered class="bg-grey-3">
               <q-card-section>
-                <div class="text-subtitle2">Questions Answered</div>
+                <div class="text-subtitle2">{{ $t('pages.game_over.questions_answered') }}</div>
                 <div class="text-h6">{{ gameState.currentQuestionIndex }}</div>
               </q-card-section>
             </q-card>
@@ -31,7 +31,7 @@
           <div class="col-xs-12 col-sm-6">
             <q-card flat bordered class="bg-grey-3">
               <q-card-section>
-                <div class="text-subtitle2">Difficulty</div>
+                <div class="text-subtitle2">{{ $t('pages.game_over.difficulty') }}</div>
                 <div class="text-h6 text-capitalize">{{ gameState.difficulty }}</div>
               </q-card-section>
             </q-card>
@@ -43,15 +43,15 @@
           <div class="col-12">
             <q-card flat bordered class="bg-grey-3">
               <q-card-section>
-                <div class="text-subtitle2">Used lifelines:</div>
+                <div class="text-subtitle2">{{ $t('pages.game_over.used_lifelines') }}:</div>
                 <div class="text-caption">
-                  Extend Time: {{ gameState.lifelinesRemaining.extendTime ? 'No' : 'Yes' }}
+                  {{ $t('lifelines.extend_time.label')}}: {{ gameState.lifelinesRemaining.extend_time ? $t('common.no') : $t('common.yes') }}
                 </div>
                 <div class="text-caption">
-                  Hide Half: {{ gameState.lifelinesRemaining.split ? 'No' : 'Yes' }}
+                  {{ $t('lifelines.fifty_fifty.label')}}: {{ gameState.lifelinesRemaining.fifty_fifty ? $t('common.no') : $t('common.yes') }}
                 </div>
                 <div class="text-caption">
-                  Extend Time: {{ gameState.lifelinesRemaining.showHint ? 'No' : 'Yes' }}
+                  {{ $t('lifelines.show_hint.label')}}: {{ gameState.lifelinesRemaining.show_hint ? $t('common.no') : $t('common.yes') }}
                 </div>
               </q-card-section>
             </q-card>
@@ -63,14 +63,14 @@
       <q-card-actions align="center" class="q-gutter-md">
         <q-btn
           color="primary"
-          label="Play Again"
+          :label="$t('buttons.play_again.label')"
           @click="playAgain"
           size="lg"
         />
         <q-btn
           outline
           color="primary"
-          label="Change Difficulty"
+          :label="$t('buttons.change_difficulty.label')"
           @click="newGame"
           size="lg"
         />

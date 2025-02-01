@@ -90,7 +90,7 @@ src/
 ├── composables/       # Reusable composition logic
 │   └── lifelines/
 │       ├── extendTimeLifeline.ts
-│       ├── removeHalfOptionsLifeline.ts
+│       ├── fiftyFiftyLifeline.ts
 │       └── showHintLifeline.ts
 ├── config/           # Configuration files
 ├── css/             # Styling

@@ -108,6 +108,7 @@ import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useGameStore } from 'src/stores/gameStore'
 import { useSettingsStore } from 'src/stores/settingsStore'
+import { useLanguageStore } from 'stores/language'
 import { GAME_SETTINGS } from 'src/config/gameSettings'
 import { MediaWikiClient } from 'src/services/wiki/mediaWikiClient'
 import { OpenAIQuestionGenerator } from 'src/services/ai/openAiGenerator'
@@ -117,13 +118,15 @@ import GameTimer from 'src/components/game/GameTimer.vue'
 import PrizeLadder from 'src/components/game/PrizeLadder.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { ExtendTimeLifeline } from 'src/composables/lifelines/extendTimeLifeline'
-import { RemoveHalfOptionsLifeline } from 'src/composables/lifelines/removeHalfOptionsLifeline'
+import { FiftyFiftyLifeline } from 'src/composables/lifelines/fiftyFiftyLifeline'
 import { ShowHintLifeline } from 'src/composables/lifelines/showHintLifeline'
 
 const router = useRouter();
 const $q = useQuasar();
 const gameStore = useGameStore();
 const settingsStore = useSettingsStore();
+const languageStore = useLanguageStore();
+
 const { settingsState } = settingsStore;
 const gameState = computed(() => gameStore.gameState);
 const showPrizeLadder = ref(false);
@@ -131,6 +134,8 @@ const showPrizeLadder = ref(false);
 const settings = computed(() => {
   return GAME_SETTINGS[gameState.value.difficulty];
 });
+
+const currentLanguage = computed(() => languageStore.getCurrentLanguage());
 
 
 const wikiClient = new MediaWikiClient();
@@ -147,7 +152,7 @@ const loadingQuestion = ref(false);
 
 const lifelines = ref([
   new ExtendTimeLifeline(),
-  new RemoveHalfOptionsLifeline(),
+  new FiftyFiftyLifeline(),
   new ShowHintLifeline()
 ])
 
@@ -194,11 +199,17 @@ const loadQuestion = async () => {
   }
 
   try {
-    const wikiPage = await wikiClient.getRandomPage();
+
+    // Get a random Wikipedia page
+    console.log('Getting random page: ', currentLanguage.value?.code);
+    const wikiPage = await wikiClient.getRandomPage(currentLanguage.value?.code ?? 'en');
+
+    // Generate a question based on the Wikipedia page
     const questionData = await aiGenerator.generateQuestion(
       wikiPage.summary,
       settings.value.choicesCount,
-      currentQuestionDifficulty.value
+      currentQuestionDifficulty.value,
+      currentLanguage.value
     );
 
     if (!questionData.choices || !Array.isArray(questionData.choices)) {

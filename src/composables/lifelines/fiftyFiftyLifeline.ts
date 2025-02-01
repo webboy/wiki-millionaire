@@ -1,7 +1,8 @@
 import type { Lifeline, LifelineId } from 'src/types/game'
 import { useGameStore} from 'stores/gameStore'
+import { useI18n } from 'vue-i18n'
 
-export class RemoveHalfOptionsLifeline implements Lifeline{
+export class FiftyFiftyLifeline implements Lifeline{
   call(): void {
 
     const gameStore = useGameStore()
@@ -25,13 +26,13 @@ export class RemoveHalfOptionsLifeline implements Lifeline{
         .filter((choice): choice is string => choice !== undefined)
         .sort(() => Math.random() - 0.5);
       this.isUsed = true;
-      gameStore.gameState.lifelinesRemaining.split = false;
+      gameStore.gameState.lifelinesRemaining.fifty_fifty = false;
     }
   }
 
-  description: string = 'Remove half of the answers from the choices'
+  description: string = useI18n().t('lifelines.fifty_fifty.description').toString()
   icon: string = 'call_split'
-  id: LifelineId = 'remove-half-options'
+  id: LifelineId = 'fifty_fifty'
   isUsed: boolean = false
-  name: string = 'Remove Half Options'
+  name: string = useI18n().t('lifelines.fifty_fifty.label').toString()
 }
