@@ -34,3 +34,9 @@ yarn-error.log*
 Dockerfile
 .vscode
 /container/*
+
+.firebaserc
+apphosting.yaml
+firebase.json
+firebase-debug.log
+.firebase/*

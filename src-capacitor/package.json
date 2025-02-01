@@ -1,6 +1,6 @@
 {
   "name": "wiki-millionaire",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A simple quiz game using Wiki and AI",
   "author": "webboy <extramedia.nemanja@gmail.com>",
   "private": true,
