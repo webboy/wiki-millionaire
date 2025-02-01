@@ -3,7 +3,7 @@
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-toolbar-title>
-          Wiki Millionaire
+          {{ $t('common.app_name') }}
         </q-toolbar-title>
         <q-separator vertical/>
         <!-- Settings button -->

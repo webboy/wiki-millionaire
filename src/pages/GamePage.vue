@@ -43,7 +43,7 @@
         <!-- Question section -->
         <q-card :class="'question-card q-pa-lg ' + getQuestionBackgroundClass(currentQuestion)">
           <q-card-section v-if="loadingQuestion" class="text-h5 text-center q-mb-xl">
-            <q-spinner-clock /> Loading question...
+            <q-spinner-clock /> {{ $t('pages.game.loading_question') }}
           </q-card-section>
           <div v-else>
             <q-card-section class="text-h5 q-mb-xl text-primary text-center">
@@ -63,14 +63,14 @@
             </q-card-section>
             <q-card-section v-if="currentQuestion?.showHint">
               <div class="text-body1 q-col-gutter-md justify-center">
-                <span class="text-bold">Hint: </span> {{ currentQuestion?.hint }}
+                <span class="text-bold">{{ $t('pages.game.hint') }}: </span> {{ currentQuestion?.hint }}
               </div>
             </q-card-section>
           </div>
         </q-card>
         <!-- Source citation -->
         <div class="text-caption q-mt-md text-center" v-if="currentQuestion?.wikiSource">
-          Source: {{ currentQuestion.wikiSource.title }}
+          {{ $t('pages.game.source')}}: {{ currentQuestion.wikiSource.title }}
         </div>
       </div>
     </div>

@@ -9,15 +9,15 @@
             <q-icon name="emoji_events" size="50px" />
           </q-avatar>
         </div>
-        <div class="text-h3 text-deep-knowledge-blue q-mb-md">Wiki Millionaire</div>
-        <div class="text-subtitle1 text-royal-wisdom">Test your knowledge and win virtual millions!</div>
+        <div class="text-h3 text-deep-knowledge-blue q-mb-md">{{ $t('pages.welcome.title')}}</div>
+        <div class="text-subtitle1 text-royal-wisdom">{{ $t('pages.welcome.description')}}</div>
       </q-card-section>
       <!-- Quick Rules -->
       <q-card-section class="text-center q-pt-none">
         <q-btn
           glossy
           color="info"
-          label="How to Play"
+          :label="$t('buttons.how_to_play.label')"
           @click="rulesDialog = true"
         />
       </q-card-section>
@@ -26,10 +26,11 @@
           <!-- Player Name Input with Icon -->
           <q-input
             v-model="playerName"
-            label="Your Name"
+            :label="$t('inputs.user_name.label')"
             :rules="[val => !!val || 'Name is required']"
             outlined
             class="name-input"
+            :hint="$t('inputs.user_name.hint')"
           >
             <template v-slot:prepend>
               <q-icon name="person" color="deep-knowledge-blue" />
@@ -38,7 +39,7 @@
 
           <!-- Difficulty Selection -->
           <div>
-            <div class="text-h6 q-mb-sm text-deep-knowledge-blue">Select Difficulty:</div>
+            <div class="text-h6 q-mb-sm text-deep-knowledge-blue">{{ $t('pages.welcome.select_difficulty')}}:</div>
             <div class="row q-col-gutter-md justify-center">
               <div v-for="diff in difficulties" :key="diff.value" class="col-12 col-sm-4">
                 <q-card
@@ -62,19 +63,19 @@
                         <q-item-section avatar>
                           <q-icon name="help" size="xs" />
                         </q-item-section>
-                        <q-item-section>{{ diff.questions }} questions</q-item-section>
+                        <q-item-section>{{ diff.questions }}</q-item-section>
                       </q-item>
                       <q-item>
                         <q-item-section avatar>
                           <q-icon name="timer" size="xs" />
                         </q-item-section>
-                        <q-item-section>{{ diff.time }}s per question</q-item-section>
+                        <q-item-section>{{ diff.time }}</q-item-section>
                       </q-item>
                       <q-item>
                         <q-item-section avatar>
                           <q-icon name="checklist" size="xs" />
                         </q-item-section>
-                        <q-item-section>{{ diff.choices }} choices</q-item-section>
+                        <q-item-section>{{ diff.choices }}</q-item-section>
                       </q-item>
                     </q-list>
                   </q-card-section>
@@ -96,7 +97,7 @@
             >
               <div class="row items-center">
                 <q-icon name="play_arrow" size="md" class="q-mr-sm" />
-                <div class="text-h6">Start Game</div>
+                <div class="text-h6">{{ $t('buttons.start.label') }}</div>
               </div>
             </q-btn>
           </div>
@@ -110,7 +111,7 @@
     <q-dialog v-model="rulesDialog">
       <q-card style="min-width: 350px">
         <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6">How to Play</div>
+          <div class="text-h6">{{ $t('pages.welcome.how_to_play')}}</div>
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
@@ -136,10 +137,12 @@ import { useRouter } from 'vue-router';
 import { useGameStore } from 'src/stores/gameStore';
 import { GAME_SETTINGS } from 'src/config/gameSettings'
 import type { Difficulty } from 'src/types/game';
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const gameStore = useGameStore();
 const rulesDialog = ref(false);
+const t = useI18n().t;
 
 const playerName = ref('');
 const selectedDifficulty = ref<Difficulty>('medium');
@@ -147,33 +150,33 @@ const selectedDifficulty = ref<Difficulty>('medium');
 const difficulties = [
   {
     value: 'easy' as const,
-    label: 'Easy',
-    questions: GAME_SETTINGS['easy'].questionsCount,
-    time: GAME_SETTINGS['easy'].timePerQuestion,
-    choices: GAME_SETTINGS['easy'].choicesCount
+    label: t('difficulties.easy.label'),
+    questions: t('difficulties.questions',{count: GAME_SETTINGS['easy'].questionsCount}),
+    time: t('difficulties.time_per_question', {time: GAME_SETTINGS['easy'].timePerQuestion}),
+    choices: t('difficulties.choices', {count: GAME_SETTINGS['easy'].choicesCount})
   },
   {
     value: 'medium' as const,
-    label: 'Medium',
-    questions: GAME_SETTINGS['medium'].questionsCount,
-    time: GAME_SETTINGS['medium'].timePerQuestion,
-    choices: GAME_SETTINGS['medium'].choicesCount
+    label: t('difficulties.medium.label'),
+    questions: t('difficulties.questions',{count: GAME_SETTINGS['medium'].questionsCount}),
+    time: t('difficulties.time_per_question', {time: GAME_SETTINGS['medium'].timePerQuestion}),
+    choices: t('difficulties.choices', {count: GAME_SETTINGS['medium'].choicesCount})
   },
   {
     value: 'hard' as const,
-    label: 'Hard',
-    questions: GAME_SETTINGS['hard'].questionsCount,
-    time: GAME_SETTINGS['hard'].timePerQuestion,
-    choices: GAME_SETTINGS['hard'].choicesCount
+    label: t('difficulties.hard.label'),
+    questions: t('difficulties.questions',{count: GAME_SETTINGS['hard'].questionsCount}),
+    time: t('difficulties.time_per_question', {time: GAME_SETTINGS['hard'].timePerQuestion}),
+    choices: t('difficulties.choices', {count: GAME_SETTINGS['hard'].choicesCount})
   }
 ];
 
 const gameRules = [
-  { icon: 'quiz', text: 'Answer questions generated from Wikipedia articles' },
-  { icon: 'schedule', text: 'Race against time for each question' },
-  { icon: 'trending_up', text: 'Progress through increasing prize levels' },
-  { icon: 'psychology', text: 'Use lifelines wisely when needed' },
-  { icon: 'savings', text: 'Reach milestones to secure your winnings' }
+  { icon: 'quiz', text: t('game_rules.rule_1') },
+  { icon: 'schedule', text: t('game_rules.rule_2') },
+  { icon: 'trending_up', text: t('game_rules.rule_3') },
+  { icon: 'psychology', text: t('game_rules.rule_4') },
+  { icon: 'savings', text: t('game_rules.rule_5') }
 ];
 
 const getDifficultyIcon = (difficulty: Difficulty) => {
