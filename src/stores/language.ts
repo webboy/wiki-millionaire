@@ -67,7 +67,6 @@ export const useLanguageStore = defineStore('language', () => {
   }
 
   const getCurrentLanguage = () => {
-    console.log('currentLocale.value', currentLocale.value);
     return languages.find((language) => language.value === currentLocale.value)
   }
 

@@ -136,6 +136,7 @@ import { useGameStore } from 'src/stores/gameStore';
 import { GAME_SETTINGS } from 'src/config/gameSettings'
 import type { Difficulty } from 'src/types/game';
 import { useI18n } from 'vue-i18n';
+import { gameAnalytics } from 'src/services/analytics/firebase'
 
 const router = useRouter();
 const gameStore = useGameStore();
@@ -197,7 +198,13 @@ const isFormValid = computed(() => {
 
 const startGame = async () => {
   if (isFormValid.value) {
+    // Start Game
     gameStore.startGame(playerName.value.trim(), selectedDifficulty.value);
+
+    // Log Analytics Event
+    gameAnalytics.logGameStart(selectedDifficulty.value);
+
+    // Navigate to Game Page
     await router.push({ name: 'game' });
   }
 };

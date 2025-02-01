@@ -23,11 +23,10 @@ declare module 'vue-i18n' {
 
 export default defineBoot(({ app }) => {
 
+  // Get the selected locale from localStorage
   const selectedLocale: MessageLanguages = (localStorage.getItem('selectedLocale') as MessageLanguages) || 'en-US';
 
-  console.log('selectedLocale', selectedLocale);
-
-
+  // Create a new i18n instance
   const i18n = createI18n<{ message: MessageSchema }, MessageLanguages>({
     locale: selectedLocale,
     legacy: false,

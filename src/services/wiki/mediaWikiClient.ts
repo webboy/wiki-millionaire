@@ -28,8 +28,6 @@ export class MediaWikiClient implements WikiClient {
 
     const apiBase = this.getApiBase(language);
 
-    console.log('apiBase', apiBase);
-
     const params = {
       action: 'query',
       format: 'json',

@@ -120,6 +120,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ExtendTimeLifeline } from 'src/composables/lifelines/extendTimeLifeline'
 import { FiftyFiftyLifeline } from 'src/composables/lifelines/fiftyFiftyLifeline'
 import { ShowHintLifeline } from 'src/composables/lifelines/showHintLifeline'
+import { gameAnalytics} from 'src/services/analytics/firebase'
 
 const router = useRouter();
 const $q = useQuasar();
@@ -201,7 +202,6 @@ const loadQuestion = async () => {
   try {
 
     // Get a random Wikipedia page
-    console.log('Getting random page: ', currentLanguage.value?.code);
     const wikiPage = await wikiClient.getRandomPage(currentLanguage.value?.code ?? 'en');
 
     // Generate a question based on the Wikipedia page
@@ -285,11 +285,21 @@ const handleTimeUp = () => {
 const submitAnswer = (index: number) => {
   if (!currentQuestion.value) return;
 
+
+
   answered.value = true;
   const isCorrect = index === currentQuestion.value.correctAnswerIndex;
 
   const handleAnswer = async () => {
     gameStore.answerQuestion(isCorrect, settings.value);
+
+    // Log analytics event
+    gameAnalytics.logQuestionAnswer({
+      questionNumber: currentQuestionIndex.value,
+      correct: isCorrect,
+      timeSpent: settings.value.timePerQuestion - gameState.value.timeRemaining,
+      prizeLevel: gameState.value.currentPrize
+    });
 
     if (gameState.value.isGameOver) {
       await router.push({ name: 'gameOver' });
