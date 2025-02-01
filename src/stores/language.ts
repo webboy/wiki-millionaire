@@ -15,6 +15,46 @@ export const useLanguageStore = defineStore('language', () => {
       code: 'en'
     },
     {
+      label: 'Deutsch',
+      value: 'de',
+      code: 'de'
+    },
+    {
+      label: 'Español',
+      value: 'es',
+      code: 'es'
+    },
+    {
+      label: 'Français',
+      value: 'fr',
+      code: 'fr'
+    },
+    {
+      label: 'Italiano',
+      value: 'it',
+      code: 'it'
+    },
+    {
+      label: 'Português',
+      value: 'pt',
+      code: 'pt'
+    },
+    {
+      label: 'Русский',
+      value: 'ru',
+      code: 'ru'
+    },
+    {
+      label: '日本語',
+      value: 'ja',
+      code: 'ja'
+    },
+    {
+      label: '中文',
+      value: 'zh',
+      code: 'zh'
+    },
+    {
       label: 'Српски',
       value: 'sr-Cyr',
       code: 'sr'
